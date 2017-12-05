@@ -46,17 +46,17 @@ const User = bookshelf.Model.extend({
         .delete()
     ]);
     // Below did not work for some reason:
-    // return User
-    //   .forge({id: model.get('id')})
-    //   .fetch({
-    //     withRelated: ['following', 'followers']
-    //   })
-    //   .then((u) => {
-    //     return Promise.all([
-    //       u.related('followers').detach(),
-    //       u.related('following').detach()
-    //     ]).then((x) => { console.log('done detaching ', u.get('id'))});
-    //   });
+     return User
+       .forge({id: model.get('id')})
+       .fetch({
+         withRelated: ['following', 'followers']
+       })
+       .then((u) => {
+         return Promise.all([
+           u.related('followers').detach(),
+           u.related('following').detach()
+         ]).then((x) => { console.log('done detaching ', u.get('id'))});
+       });
   },
   validatePassword: function(suppliedPassword) {
     let self = this;
