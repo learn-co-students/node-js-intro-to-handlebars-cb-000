@@ -108,11 +108,26 @@ app.get('/user/:id', isAuthenticated, (req,res) => {
 });
 
 app.post('/user', (req, res) => {
-  if (_.isEmpty(req.body))
+  const { body } = req;
+
+  if (_.isEmpty(body))
     return res.sendStatus(400);
 
+
+  if (!body.username || !body.password || !body['confirm-password']) {
+    console.log('all fields needed');
+    return res.redirect('/signup');
+  }
+
+  if (body.password !== body['confirm-password']) {
+    req.flash('error', 'Password did not match confirmation!');
+    return res.redirect('/signup');
+  }
+
+  delete body['confirm-password'];
+
   User
-    .forge(req.body)
+    .forge(body)
     .save()
     .then((usr) => {
       res.send({id: usr.id});
@@ -249,6 +264,10 @@ app.post('/login', passport.authenticate('local', {
   failureFlash: true
 }), function(req, res) {
   res.redirect('/posts');
+});
+
+app.get('/signup', (req, res) => {
+  res.render('signup', { message: req.flash('error') });
 });
 
 // Exports for Server Hoisting.
