@@ -16,7 +16,7 @@ let mockUser = {
   name: 'Sally Low',
   username: 'sally',
   email: 'sally@example.org',
-  password: 'password',
+  password: 'password'
 };
 
 let anotherMockUser = {
@@ -31,6 +31,16 @@ let aThirdMockUser = {
   username: 'johnny',
   email: 'johnny@example.org',
   password: 'password'
+};
+
+// 'POST to /user with valid data returns new user id'
+// needs confirm-password
+let aFourthdMockUser = {
+  name: 'Jerry Garcia',
+  username: 'jerry',
+  email: 'jerry@example.org',
+  password: 'password',
+  "confirm-password": 'password'
 };
 
 let mockPost = {
@@ -87,7 +97,7 @@ const cleanup = () => {
       .then(coll => {
         return Promise.all([
           _.forEach(coll.models, v => {
-            v.destroy(); 
+            v.destroy();
           })
         ]);
     })
@@ -102,25 +112,25 @@ let loginData = {
 describe('Server', () => {
 
   after((done) => {
-    return cleanup().then(() => { 
-      done(); 
+    return cleanup().then(() => {
+      done();
     }).catch(done);
   });
 
   describe('/user endpoint', () => {
-  
+
     let server;
-  
+
     beforeEach(() => {
       server = request.agent(baseUrl);
     });
-  
+
     afterEach((done) => {
       cleanup().then(() => {
         done();
       }).catch(done);
     });
-  
+
     it('Can log a user in', (done) => {
       login(server, {createUser: true, loginData}).then((obj) => {
         expect(obj.loginResponse.status, 'to be', 302);
@@ -133,7 +143,7 @@ describe('Server', () => {
     it('POST to /user with valid data returns new user id', (done) => {
       server
         .post('/user')
-        .send(mockUser)
+        .send(aFourthdMockUser)
         .expect(200)
         .end((err, resp) => {
           if (err) done(err);
@@ -375,7 +385,7 @@ describe('Server', () => {
                 });
             });
         }).catch((err) => { throw err; });
-      }).catch(done); 
+      }).catch(done);
     });
 
     it('GET to /unfollow/:id with valid user id returns something', (done) => {
