@@ -30,4 +30,3 @@ exports.down = function(knex, Promise) {
     .dropTable('posts')
     .dropTable('users');
 };
-
