@@ -4,7 +4,7 @@ const bookshelf = require('../db/bookshelf');
 
 const Comment = require('./comment');
 const Post = require('./post');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 const User = bookshelf.Model.extend({
   tableName: 'users',
