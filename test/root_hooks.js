@@ -1,26 +1,26 @@
 "use strict";
 
-const chai = require('chai');
-const app = require('../app');
-const expect = chai.expect;
+	const chai = require('chai');
+	const app = require('../app');
+	const expect = chai.expect;
 
-let server;
+	let server;
 
-before(done => {
-  return app.up().then(_server => {
-    server = _server;
-    done();
-  });
-});
+	before(done => {
+	  return app.up().then(_server => {
+	    server = _server;
+	    done();
+	  });
+	});
 
-after(() => {
-  server.close();
-});
+	after(() => {
+	  server.close();
+	});
 
-describe('app', () => {
-  describe('up', () => {
-    it('is a function', () => {
-      expect(app.up).to.be.an.instanceof(Function);
-    });
-  });
-});
+	describe('app', () => {
+	  describe('up', () => {
+	    it('is a function', () => {
+	      expect(app.up).to.be.an.instanceof(Function);
+	    });
+	  });
+	});
