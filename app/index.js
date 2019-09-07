@@ -108,20 +108,34 @@ app.get('/user/:id', isAuthenticated, (req,res) => {
 });
 
 app.post('/user', (req, res) => {
+
   if (_.isEmpty(req.body))
     return res.sendStatus(400);
 
-  User
-    .forge(req.body)
-    .save()
-    .then((usr) => {
-      res.send({id: usr.id});
-    })
-    .catch((error) => {
-      console.error(error);
-      req.flash('error', error.message);
-      return res.sendStatus(500);
-    });
+  const { body } = req;
+
+   if (!body.username || !body.password || !body['confirm-password']) {
+     req.flash('error', 'All fields are required!');
+     return res.redirect('/signup');
+   }
+
+   if (body.password !== body['confirm-password']) {
+     req.flash('error', 'Password did not match confirmation!');
+     return res.redirect('/signup');
+   }
+
+   delete body['confirm-password'];
+
+   User
+     .forge(req.body)
+     .save()
+     .then((usr) => {
+       res.send({id: usr.id});
+     })
+     .catch((error) => {
+       console.error(error);
+       return res.sendStatus(500);
+     });
 });
 
 app.get('/posts', isAuthenticated, (req, res) => {
@@ -251,6 +265,9 @@ app.post('/login', passport.authenticate('local', {
   res.redirect('/posts');
 });
 
+app.get('/signup', (req, res) => {
+  res.render('signup', { message: req.flash('error') });
+});
 // Exports for Server Hoisting.
 
 const listen = (port) => {
